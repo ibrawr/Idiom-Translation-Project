@@ -210,3 +210,303 @@ The modular structure allowed the same project pipeline to support both fine-tun
 ├── Dockerfile                       # Docker image definition
 ├── requirements.txt                 # Python dependencies
 └── README.md
+```
+---
+
+## Evaluation Metrics
+
+Three evaluation methods were used.
+
+### BLEU
+
+BLEU measures n-gram precision between the predicted translation and the reference translation. It is commonly used for machine translation, but it is limited for idiom translation because a correct idiom may use different wording from the reference.
+
+### ROUGE-L
+
+ROUGE-L measures the longest common subsequence between the prediction and the reference. Like BLEU, it relies on surface-level overlap and may not capture cultural meaning.
+
+### Cultural Faithfulness Score
+
+The Cultural Faithfulness Score was designed for this project to evaluate whether the predicted Urdu output preserved the idiomatic meaning of the English source.
+
+It used a 5-point scale:
+
+| Score | Meaning |
+| --- | --- |
+| 5 | Perfect idiomatic translation |
+| 4 | Culturally natural |
+| 3 | Understandable but not idiomatic |
+| 2 | Partially correct |
+| 1 | Literal or incorrect translation |
+
+CFS scoring was performed manually by reviewing each prediction alongside the English idiom and the Urdu reference.
+
+---
+
+## Quantitative Results
+
+Both models performed poorly across all evaluation metrics.
+
+| Metric | Full Fine-Tuning | LoRA | Notes |
+| --- | ---: | ---: | --- |
+| BLEU | 0.17 | 0.03 | Both near zero |
+| ROUGE-L | 0.0000 | 0.0000 | Zero lexical overlap with references |
+| CFS Average | 1.00 / 5.00 | 1.00 / 5.00 | All predictions were incorrect |
+
+Full fine-tuning achieved a higher BLEU score than LoRA, but both scores were still extremely low. ROUGE-L was 0.0000 for both models, showing no meaningful lexical overlap with the reference translations.
+
+The Cultural Faithfulness Score was 1.00 out of 5.00 for both models, meaning neither approach captured idiomatic or cultural meaning.
+
+---
+
+## Cultural Evaluation Results
+
+CFS scoring was applied to all 212 test predictions for both models.
+
+| Score | Meaning | Full FT % | LoRA % |
+| --- | --- | ---: | ---: |
+| 5 | Perfect idiomatic translation | 0% | 0% |
+| 4 | Culturally natural | 0% | 0% |
+| 3 | Understandable but not idiomatic | 0% | 0% |
+| 2 | Partially correct | 0% | 0% |
+| 1 | Literal or incorrect translation | 100% | 100% |
+
+| Model | Average CFS |
+| --- | ---: |
+| Full Fine-Tuning | 1.00 / 5.00 |
+| LoRA | 1.00 / 5.00 |
+
+Neither model captured the idiomatic intent of the English expressions in natural Urdu.
+
+---
+
+## Qualitative Examples
+
+| Input Idiom | Reference Meaning | Full Fine-Tuning Output Pattern | LoRA Output Pattern |
+| --- | --- | --- | --- |
+| A CHIP OF THE OLD BLOCK | Urdu equivalent for resembling a parent | Repeated short phrase | Long incoherent Urdu string |
+| A friend in need is a friend indeed | Urdu equivalent for a true friend helping in difficulty | Repeated unrelated phrase | Garbled Urdu text |
+| Break the ice | Urdu equivalent for starting conversation | Repeated unrelated phrase | Garbled Urdu text |
+| BURST INTO FLAME | Urdu equivalent for catching fire | Repeated short phrase | Incoherent output |
+| Time waits for no one | Urdu equivalent for time not waiting for anyone | Repeated short phrase | Incoherent output |
+
+The full fine-tuning model repeatedly produced a small set of short Urdu phrases regardless of the input idiom. This suggests model collapse, where the model learns a safe repeated response instead of learning task-specific mappings.
+
+The LoRA model produced longer but incoherent Urdu outputs. This suggests that the adapter layers failed to meaningfully redirect the base model toward the idiom translation task.
+
+---
+
+## Method Comparison
+
+| Attribute | Full Fine-Tuning | LoRA |
+| --- | --- | --- |
+| Translation quality | Collapsed into 3 to 4 repeated short phrases | Generated long incoherent garbled text |
+| Fluency | Short but meaningless | Long but unreadable |
+| Consistency | Highly consistent, same wrong answer repeatedly | Inconsistent and different garbled output each time |
+| Training efficiency | Higher compute, all model parameters updated | Lower compute, only adapter parameters trained |
+| BLEU score | 0.17 | 0.03 |
+| CFS average | 1.00 / 5.00 | 1.00 / 5.00 |
+
+Full fine-tuning had more capacity because it updated all model parameters, but it still collapsed into repetitive output. LoRA was more efficient but did not have enough flexibility to learn the task effectively with the limited dataset.
+
+---
+
+## Discussion
+
+### Full Fine-Tuning
+
+Full fine-tuning showed that some general language knowledge transferred from the pre-trained mT5-small model. The outputs were often short and readable, which suggests that the model retained some ability to generate Urdu text.
+
+However, the model failed to translate idioms correctly. It often generated generic Urdu phrases unrelated to the input idiom. It also repeated similar outputs across many test samples.
+
+This likely happened because the dataset was too small for the complexity of idiom translation. With only around 1,689 training samples, the model may have overfitted and relied on high-probability Urdu patterns rather than learning accurate idiomatic mappings.
+
+### LoRA
+
+LoRA showed that the model could be trained more efficiently by updating far fewer parameters. This made it computationally cheaper than full fine-tuning.
+
+However, the outputs were less stable than full fine-tuning. Many predictions were fragmented, garbled, or unreadable. Because the base model weights remained frozen and only small adapter matrices were trained, the model had limited flexibility to adapt to the task.
+
+The combination of a small dataset, a compact base model, and the difficulty of idiom translation made LoRA ineffective for this project.
+
+---
+
+## Key Findings
+
+- Transfer learning alone was not enough for English-to-Urdu idiom translation in this setting
+- Full fine-tuning performed slightly better than LoRA numerically, but still failed in practice
+- LoRA was more computationally efficient but produced less readable outputs
+- Both models failed to capture cultural and idiomatic meaning
+- BLEU and ROUGE were not sufficient for evaluating idiom translation quality
+- Manual cultural evaluation was necessary to understand the real quality of the predictions
+- The small dataset size was a major limitation
+- Idiom translation requires cultural and semantic understanding, not just multilingual pre-training
+
+---
+
+## Project Status
+
+This project is complete as an academic NLP experiment for CSCI316 Big Data Mining and Applications.
+
+The final models did not achieve usable translation quality. Both full fine-tuning and LoRA received a Cultural Faithfulness Score of 1.00 out of 5.00. The project is included as a research-style portfolio project because it demonstrates the full NLP experimentation process, including data preparation, transfer learning, parameter-efficient fine-tuning, evaluation, Dockerised deployment, and failure analysis.
+
+---
+
+## Future Work
+
+Future improvements could include:
+
+- Expanding the dataset with more English-Urdu idiom pairs
+- Using larger multilingual models with stronger translation capabilities
+- Applying data augmentation to increase training diversity
+- Using prompt-based learning or instruction-tuned multilingual models
+- Incorporating external Urdu linguistic resources
+- Improving the category classification method beyond keyword matching
+- Testing models designed specifically for Urdu or South Asian languages
+- Using human evaluation from native Urdu speakers for more reliable cultural assessment
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Make sure Docker Desktop is installed and running.
+
+### Running with Docker
+
+Open a terminal in the project root folder. The folder should contain:
+
+- `Dockerfile`
+- `app.py`
+- `config.yaml`
+- `requirements.txt`
+- `src/`
+- `outputs/`
+- `dataset_final.csv`
+
+Build the Docker image:
+
+```bash
+docker build --no-cache -t idioms-316project2:latest .
+```
+
+Run the container:
+
+```powershell
+docker run -p 8001:8000 -v "$($PWD.Path)\outputs:/app/outputs" -v "$($PWD.Path)\dataset_final.csv:/app/dataset_final.csv" idioms-316project2:latest
+```
+
+Open the API documentation in your browser:
+
+```text
+http://127.0.0.1:8001/docs
+```
+
+The container runs on port 8000 internally and is exposed on host port 8001 to avoid conflicts with other local services.
+
+---
+
+## Testing Inference
+
+Use the `POST /predict` endpoint in Swagger UI.
+
+Example request:
+
+```json
+{
+  "idiom": "Empty vessels make more noise.",
+  "model_type": "full_ft"
+}
+```
+
+The API uses the mounted `outputs/` directory and `dataset_final.csv` file so the container can access model outputs and fallback data at runtime.
+
+---
+
+## Running Locally
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+---
+
+## Dependencies
+
+```text
+torch
+transformers
+peft
+datasets
+evaluate
+sacrebleu
+rouge-score
+pandas
+openpyxl
+fastapi
+uvicorn
+```
+
+---
+
+## Tech Stack
+
+**Language:** Python 3.11  
+**Model:** mT5-small, `google/mt5-small`  
+**Training Framework:** PyTorch, HuggingFace Transformers, Seq2SeqTrainer  
+**Parameter-Efficient Fine-Tuning:** LoRA using PEFT  
+**Evaluation:** BLEU, ROUGE-L, Cultural Faithfulness Score  
+**Data Processing:** pandas, HuggingFace Datasets  
+**Inference API:** FastAPI, Uvicorn  
+**Containerisation:** Docker  
+**Dataset Source:** HuggingFace dataset by Ehtisham ul Hassan  
+
+---
+
+## Skills Demonstrated
+
+- Transfer learning for multilingual NLP
+- Sequence-to-sequence model fine-tuning
+- HuggingFace Transformers and Seq2SeqTrainer
+- Parameter-efficient fine-tuning with LoRA
+- PEFT library implementation
+- mT5-small model training and inference
+- Dataset cleaning and preprocessing with pandas
+- Instruction-style prompt formatting
+- Tokenisation, attention masks, and label preparation
+- Manual evaluation of culturally nuanced translation outputs
+- Custom Cultural Faithfulness Score design
+- BLEU and ROUGE-L evaluation
+- Model failure diagnosis and collapse analysis
+- Docker containerisation
+- FastAPI endpoint development
+- Swagger UI testing
+- Low-resource language experimentation
+
+---
+
+## Demo
+
+YouTube walkthrough:
+
+```text
+https://www.youtube.com/watch?v=Q8yBS5gJ4IQ
+```
+
+---
+
+## References
+
+Ehtisham ul Hassan. (2024). Urdu Idioms with English Translation dataset. HuggingFace.
+
+Hassan, M. T., Ahmed, J., and Awais, M. (2026). Qalb: Largest State-of-the-Art Urdu Large Language Model for 230M Speakers with Systematic Continued Pre-training. arXiv.
+
+---
+
+## Author
+
+**Ibrar Bhatti**  
+GitHub: [ibrawr](https://github.com/ibrawr)
+
