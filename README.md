@@ -487,16 +487,6 @@ uvicorn
 
 ---
 
-## Demo
-
-YouTube walkthrough:
-
-```text
-https://www.youtube.com/watch?v=Q8yBS5gJ4IQ
-```
-
----
-
 ## References
 
 Ehtisham ul Hassan. (2024). Urdu Idioms with English Translation dataset. HuggingFace.
