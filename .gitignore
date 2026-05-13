@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model outputs and checkpoints
+outputs/
+checkpoints/
+models/
+runs/
+wandb/
+
+# Large ML files
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+*.joblib
+*.pkl
+
+# Data files
+*.xlsx
+*.xls
+*.csv
+
+# Keep small sample files if needed
+!dataset_sample.csv
+!sample_predictions.json
+
+# OS files
+.DS_Store
+Thumbs.db

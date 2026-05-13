@@ -1,0 +1,28 @@
+project:
+  name: "Urdu Idiom Translation"
+  task: "English idiom to Urdu cultural translation"
+  language: "Urdu"
+  base_model: "google/mt5-small"
+
+paths:
+  full_ft_checkpoint: "outputs/full_ft/checkpoint-1410"
+  lora_checkpoint: "outputs/lora/checkpoint-1272"
+  full_ft_training_log: "outputs/full_ft/training_logs.txt"
+  lora_training_log: "outputs/lora/training_logs.txt"
+  scores_csv: "evaluation_results/scores.csv"
+  comparison_table_csv: "evaluation_results/comparison_table.csv"
+  qualitative_examples_txt: "evaluation_results/qualitative_examples.txt"
+  results_summary_csv: "results_summary.csv"
+
+inference:
+  default_model: "full_ft"
+  max_input_length: 96
+  max_output_length: 60
+  num_beams: 4
+  repetition_penalty: 2.0
+  no_repeat_ngram_size: 3
+  device: "auto"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
