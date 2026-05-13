@@ -1,0 +1,28 @@
+{
+  "model_name": "google/mt5-small",
+  "task": "English Idiom to Urdu Cultural Translation",
+  "person": "Person 3 - Core Training Pipeline",
+  "epochs_trained": 1,
+  "batch_size": 2,
+  "learning_rate": 0.0005,
+  "train_samples": 1689,
+  "val_samples": 211,
+  "test_samples": 212,
+  "dependencies": {
+    "person_1": {
+      "file": "dataset_final.csv",
+      "rows": 2112,
+      "script": "01_dataset_preparation.py"
+    },
+    "person_2": {
+      "files": {
+        "train": "processed_train.json",
+        "val": "processed_val.json",
+        "test": "processed_test.json"
+      },
+      "total_samples": 2112
+    }
+  },
+  "dataset_summary_file": "dataset_integration_summary.json",
+  "note": "sanity run to verify the pipeline works end to end"
+}

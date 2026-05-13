@@ -1,0 +1,42 @@
+{
+  "run_info": {
+    "model": "google/mt5-small",
+    "task": "English Idiom to Urdu Cultural Translation",
+    "person": "Person 3",
+    "source_dataset": "dataset_final.csv",
+    "test_split": "processed_test.json",
+    "num_samples": 5
+  },
+  "predictions": [
+    {
+      "index": 0,
+      "input": "Convert the following English idiom into its natural Urdu equivalent: MANY KISS THE HAND THEY WISH CUT OFF",
+      "reference": "دِل میں زہر زبان پر شہد !",
+      "prediction": "جِس کی عقلمندی میں بہتر ہوتا ہے"
+    },
+    {
+      "index": 1,
+      "input": "Convert the following English idiom into its natural Urdu equivalent: AFTER WIT IS FOOL'S WIT",
+      "reference": "بعد از وقت سمجھ آئی تو کیا ؟",
+      "prediction": "چیزوں کا بہتر ہوتا ہے"
+    },
+    {
+      "index": 2,
+      "input": "Convert the following English idiom into its natural Urdu equivalent: FOLLY GROWS WITHOUT WATERING",
+      "reference": "بیوقوفی کا پودا بلا سینچے ہی بڑھتا جاتا ہے",
+      "prediction": "چیزوں کا بہتر ہے"
+    },
+    {
+      "index": 3,
+      "input": "Convert the following English idiom into its natural Urdu equivalent: CHIP OF THE OLD BLOCK",
+      "reference": "جیسا باپ ویسا بیٹا",
+      "prediction": "چیزوں کی ضرورت ہے"
+    },
+    {
+      "index": 4,
+      "input": "Convert the following English idiom into its natural Urdu equivalent: HIS VERY GREATNESS IMPEDES HIM",
+      "reference": "آدمی کا بڑا پن ہی گویا اس کے پاوٴں کی زنجیریں ہیں",
+      "prediction": "جِس کی عقلمندی میں بہتر ہے"
+    }
+  ]
+}

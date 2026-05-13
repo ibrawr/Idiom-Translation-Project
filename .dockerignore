@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+notebooks/
+evaluation/
+evaluation_results/
+results/
+README_person3.txt
+predictions.json
+processed_train.json
+processed_val.json
+processed_test.json
+outputs/
+dataset_final.csv

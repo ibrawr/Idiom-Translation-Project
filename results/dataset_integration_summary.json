@@ -1,0 +1,60 @@
+{
+  "source_file": "dataset_final.csv",
+  "source_path": "C:\\Users\\jasee\\Downloads\\316 project\\idiom_translation_project\\dataset_final.csv",
+  "source_available": true,
+  "source_rows": 2112,
+  "source_columns": [
+    "Urdu Idiom",
+    "English Translation",
+    "category"
+  ],
+  "category_counts": {
+    "action": 38,
+    "animals": 68,
+    "body": 95,
+    "communication": 38,
+    "conflict": 35,
+    "emotions": 118,
+    "health": 160,
+    "nature": 59,
+    "other": 701,
+    "quantity": 59,
+    "religion_fate": 61,
+    "secrecy": 25,
+    "social": 337,
+    "success": 94,
+    "time_money": 57,
+    "wisdom_folly": 127,
+    "work": 40
+  },
+  "processed_files": {
+    "train": "processed_train.json",
+    "val": "processed_val.json",
+    "test": "processed_test.json"
+  },
+  "processed_splits": {
+    "train": 1689,
+    "val": 211,
+    "test": 212,
+    "total": 2112
+  },
+  "counts_match": true,
+  "source_samples": [
+    {
+      "urdu_idiom": "محنت کامیابی کی کنجی ہے۔",
+      "english_translation": "Hard work is the key to success.",
+      "category": "work"
+    },
+    {
+      "urdu_idiom": "ہمتِ مرداں مددِ خدا۔",
+      "english_translation": "The courage of men is aided by God.",
+      "category": "emotions"
+    },
+    {
+      "urdu_idiom": "کام بِن دام نہیں۔",
+      "english_translation": "Nothing comes without a price.",
+      "category": "success"
+    }
+  ],
+  "warnings": []
+}
